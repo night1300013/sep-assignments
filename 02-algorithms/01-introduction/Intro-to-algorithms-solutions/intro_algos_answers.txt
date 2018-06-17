@@ -1,0 +1,43 @@
+Question: Using proper pseudo-code, describe three or more primitive algorithms used in your day-to-day life.
+
+1.Calculating a tip:
+
+IF service is bad
+  SET Tip to Bill multiply 10%
+ELSE
+  SET Tip to Bill multiply 15%
+END IF
+  RETURN Tip
+
+2. Getting to work:
+
+IF car is functional
+  GET INTO car and DRIVE to work
+ELSE
+  USE cellphone to call Uber
+END IF
+
+3. Solving a coding question:
+
+WHILE question is not solved
+  REPEAT
+    TRY and THINK solving the question
+    IF question is solved
+      Question is solved
+    END IF
+  UNTIL time reaches 1 hour
+
+  REPEAT
+    Google and research how to solving the question
+    IF question is solved
+      Question is solved
+    END IF
+  UNTIL time reaches 1 hour
+
+  REPEAT
+    Ask mentor to get the thought of how to solve the question
+    IF question is solved
+      Question is solved
+    END IF
+  UNTIL time reaches 1 hour
+END WHILE
