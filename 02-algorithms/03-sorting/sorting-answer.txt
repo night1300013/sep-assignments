@@ -1,0 +1,23 @@
+Using Ruby's benchmark module, measure the time it takes for all of the sorting algorithms discussed in this checkpoint to sort a collection of fifty items. Use your output to create a bar chart.
+1st time:
+              user     system      total        real
+bucket sort  0.000000   0.000000   0.000000 (  0.000063)
+heap sort  0.000000   0.000000   0.000000 (  0.000257)
+quick sort  0.000000   0.000000   0.000000 (  0.000005)
+
+2nd time:
+              user     system      total        real
+bucket sort  0.000000   0.000000   0.000000 (  0.000065)
+heap sort  0.000000   0.000000   0.000000 (  0.000161)
+quick sort  0.000000   0.000000   0.000000 (  0.000003)
+
+3rd time:
+              user     system      total        real
+bucket sort  0.000000   0.000000   0.000000 (  0.000056)
+heap sort  0.000000   0.000000   0.000000 (  0.000243)
+quick sort  0.000000   0.000000   0.000000 (  0.000004)
+
+Looking at the bar chart, speculate on why you think some sort algorithms are faster than others and provide rationale as to your thought process.
+Quick sort is the fastest, it is probably because it uses less loop than other sorting algorithms.It is using divide and conquer algorithms, it is faster to break into a piece and compare if each piece is almost the same.
+Heap sort is the slowest because it uses 2 loops, one to form a max heap, another to iterate through every element(linear time)
+Bucket sort creates a bucket and using divide and conquer algorithms, it is faster to break into a piece and compare if each piece is almost the same.
