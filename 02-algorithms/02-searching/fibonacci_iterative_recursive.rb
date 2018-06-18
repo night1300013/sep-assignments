@@ -1,3 +1,4 @@
+require 'benchmark'
 def fib(n)
   f0 = 0
   f1 = 1
@@ -50,3 +51,8 @@ print fib_recursion(10)
 puts fib_recursion(11)
 puts fib_recursion(12)
 puts
+
+Benchmark.bm do |x|
+  x.report("fib iterative") {fib(20)}
+  x.report("fib recursion") {fib(20)}
+end
