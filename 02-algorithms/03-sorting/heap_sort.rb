@@ -1,6 +1,5 @@
 def heapsort(collection)
   maxheap(collection)
-  p collection
   (collection.length - 1).downto 1 do |last_index|
     swap(collection, 0, last_index)
     heapify(collection, 0, last_index)
