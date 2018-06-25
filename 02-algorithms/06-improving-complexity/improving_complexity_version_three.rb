@@ -46,7 +46,7 @@ def heap_sort(array)
 end
 
 def maxheap(array)
-  length = array.length# - 1
+  length = array.length
   (length/2-1).downto 0 do |index|
     heapify(array, index, length)
   end
