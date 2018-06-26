@@ -33,8 +33,8 @@ def find_largest(collection)
  largest
 end
 
-It will be O(n^2). The first line is constant time. The second line is a for loop, the 4th line is another for loop.
-Therefore, the big O complexity is n * n which is O(n^2).
+It will be O(n). The first line is constant time. For every element, there will only perform once.
+Therefore, the big O complexity is O(n).
 
 4. What's the Big-O of the following algorithm? Submit your work and reasoning with your solution.
 def numbers(n)
@@ -127,4 +127,4 @@ def sort(collection, from=0, to=nil)
 end
 
 
-It will be O(n). each sort is O(n), 2 sort are 2*O(n) = O(n). 
+It will be O(n). each sort is O(n), 2 sort are 2*O(n) = O(n).
