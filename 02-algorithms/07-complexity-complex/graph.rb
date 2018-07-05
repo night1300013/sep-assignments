@@ -2,8 +2,7 @@ class Graph
   attr_accessor :nodes, :edges
 
   def initialize
-    @nodes = []
-    @edges = []
+    @nodes, @edges = [], []
   end
 
   def add_node(node)
@@ -15,5 +14,4 @@ class Graph
     edges << Edge.new(from, to, weight)
     edges << Edge.new(to, from, weight)
   end
-
 end
