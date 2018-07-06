@@ -1,0 +1,63 @@
+1. What data types do each of these values represent?
+  1."A Clockwork Orange" : string
+  2.42 : integer
+  3.09/02/1945 : date
+  4.98.7 : float
+  5.$15.99 : currency
+
+2. Explain in your own words when a database might be used. Explain when a text file might be used.
+  When multiple users/sources want to access one set of data at the same time.
+  Text file can be used to store all the information of the database.
+
+3. Describe one difference between SQL and other programming languages.
+  SQL is declarative languages which describes what you want instead of full detail
+  Ruby on the other hand is imperative languages which need to tell what to do step-by-step
+
+4. Explain the meaning of table, row, column, and value.
+  Table is the whole set of related data in structured format in database. It's consist of row and column
+  Row is single structured data item in a table. Every row has the same structure
+  Column is a set of data value with particular data type
+  Value is a element in table.
+
+5. List 3 data types that can be used in a table.
+  Integer, string, and text field
+
+6. Given this payments table, provide an English description of the following queries and include their results:
+
+     SELECT date, amount
+     FROM payments;
+
+     It will print out the every date and amount columns from payments database
+
+     SELECT amount
+     FROM payments
+     WHERE amount > 500;
+
+     It will print out every amount column from payments database where amount is bigger than 500
+
+     SELECT *
+     FROM payments
+     WHERE payee = 'Mega Foods';
+
+     It will print out every column from payments that payee is equal to Mega Foods
+
+7. Given this users table, write SQL queries using the following criteria and include the output:
+
+The email and sign-up date for the user named DeAndre Data.
+
+select email, signup from users where name='DeAndre Data'
+
+||email	            ||   signup    ||
+||datad@comcast.net	||  2008-01-20 ||
+
+The user ID for the user with email 'aleesia.algorithm@uw.edu'.
+
+select userid from users where email='aleesia.algorithm@uw.edu'
+|| userid ||
+|| 1      ||
+
+All the columns for the user ID equal to 4.
+
+select * from users where userid=4
+||userid||	name	        ||email	            ||signup      ||
+||4	    ||Brandy Boolean	||bboolean@nasa.gov	|| 1999-10-15 ||
