@@ -1,0 +1,62 @@
+1.Write out a generic SELECT statement.
+  SELECT * FROM products WHERE id=1234321;
+
+2.Create a fun way to remember the order of operations in a SELECT statement, such as a mnemonic.
+  start from select the vertical which is column or star for all, then from table name with condition where or not.
+
+3.Given this dogs table, write queries to select the following pieces of data:
+  - Display the name, gender, and age of all dogs that are part Labrador.
+    SELECT name, gender, and FROM dogs WHERE breed LIKE '%labrador%';
+  - Display the ids of all dogs that are under 1 year old.
+    SELECT id FROM dogs WHERE age < 1;
+  - Display the name and age of all dogs that are female and over 35lbs.
+    SELECT name, age FROM dogs WHERE gender = 'F' and weight > 35
+  - Display all of the information about all dogs that are not Shepherd mixes.
+    SELECT * FROM dogs WHERE breed NOT LIKE '%shepherd%'
+  - Display the id, age, weight, and breed of all dogs that are either over 60lbs or Great Danes.
+    - Intake teams typically guess the breed of shelter dogs, so the breed column may have multiple words (for example, "Labrador Collie mix").
+    SELECT id, age, weight, breed FROM dogs WHERE weight > 60 OR breed LIKE '%great dane%'
+
+4. Given this cats table, what records are returned from these queries?
+  - SELECT name, adoption_date FROM cats;
+  || 'Mushi'   || '2016-03-22' ||
+  ||'Seashell' ||   NULL       ||
+  || 'Azul',   || '2016-04-17' ||
+  ||'Victoire' || '2016-09-01' ||
+  || 'Nala'    ||   NULL       ||
+  - SELECT name, age FROM cats;
+  || 'Mushi'   || 1 ||
+  ||'Seashell' || 7 ||
+  || 'Azul',   || 3 ||
+  ||'Victoire' || 7 ||
+  || 'Nala'    || 1 ||
+
+5. From the cats table, write queries to select the following pieces of data.
+  - Display all the information about all of the available cats.
+    SELECT * FROM cats WHERE adoption_date=NULL
+  - Display the name and sex of all cats who are 7 years old.
+    SELECT name, sex FROM cats WHERE age > 7
+  - Find all of the names of the cats, so you don’t choose duplicate names for new cats.
+    SELECT name FROM cats
+
+6. List each comparison operator and explain, in your own words, when you would use it. Include a real world example for each.
+  - If you can’t list these from memory, do these flashcards until you can!
+    1. '>' : greater than, when want to get the results of cats that age is greater than 7. i.e. SELECT * FROM cats WHERE age > 7
+    2. '<' : smaller than, when want to get the results of cats that age is smaller than 1. i.e. SELECT * FROM cates WHERE age < 1
+    3. '>=': greater than or equal to, when want to get the results of cats that age is greater than or equal to  7. i.e. SELECT * FROM cats WHERE age >= 7
+    4. '<=': smaller than or equal to, when want to get the results of cats that age is smaller than or equal to 1. i.e. SELECT * FROM cates WHERE age <= 1
+    5. '!=', '<>': not equal to, when want to get the results of cats that age is not equal to 1. i.e. SELECT * FROM cates WHERE age <> 1
+    6. '=': equal to, when want to get the resultsof cats that age is equal to 1. i.e. SELECT * FROM cats WHERE age = 1
+
+7. From the cats table, what data is returned from these queries?
+  - SELECT name FROM cats WHERE gender = ‘F’;
+    ||'Seashell' ||
+    || 'Nala'    ||
+  - SELECT name FROM cats WHERE age <> 3;
+    || 'Mushi'   ||
+    ||'Seashell' ||
+    ||'Victoire' ||
+    || 'Nala'    ||
+  - SELECT id FROM cats WHERE name != ‘Mushi’ AND gender = ‘M’;
+    || 'Azul',   ||
+    ||'Victoire' ||
