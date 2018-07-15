@@ -1,0 +1,55 @@
+1. List 5 aggregate functions and explain, in your own words, what they are for. Include a real world example for each. If you can’t list these from memory, do these flashcards until you can!
+  - MAX: get the maximum value of given column. SELECT MAX(height) FROM students;
+  - MIN: get the minimum value of given column. SELECT MIN(weight) FROM students;
+  - SUM: add all the values of given column.  SELECT SUM(price) FROM carts;
+  - COUNT: count the values of given column. SELECT COUNT(count) FROM carts;
+  - AVG: get the average value of given column. SELECT AVG(grade) FROM midterm;
+
+2. Given this donations table, write queries and include the output for the following:
+  -The total of all donations received in the past year.
+    SELECT SUM(amount) FROM donations;
+  -The total donations over time per donor (e.g. if Tanysha has donated 3 times with the amounts $25, $30, and $50, then the result would be | Tanysha | 105 |).
+    SELECT SUM(amount) AS tot_amount, donor FROM donations GROUP BY donor ORDER BY donor;
+  -The average donation per donor.
+    SELECT AVG(amount) AS tot_amount, donor FROM donations GROUP BY donor ORDER BY donor;
+  -The number of donations over $100.
+    SELECT count(amount) FROM donations WHERE amount > 100;
+  -The largest donation received in a single instance from a single donor.
+    SELECT MAX(amount) FROM donations;
+  -The smallest donation received.
+    SELECT MIN(amount) FROM donations;
+
+3. How would you determine the display order of data returned by your SELECT statement?
+  ORDER BY `column name` [ASC/DESC];
+
+4. What is a real world situation where you would use OFFSET?
+  OFFSET Y is to display the data started from the Y, it can be use for a amazon lightening deal. The first 100 can get it, and the following need to be put on waiting list.
+
+5. Why is it important to use ORDER BY when limiting your results?
+  Since the limit is to show the first couple desired data either start from small or big, order by can sort it out.
+
+6. What is the difference between HAVING and WHERE?
+  HAVING is the condition after aggregation function, WHERE is the condition after FROM and before aggregation function
+
+7. Correct the following SELECT statement:
+  ```SELECT id, SUM (amount)
+  FROM payment
+  HAVING SUM (amount) > 200;```
+
+ SELECT id, SUM (amount) as tot_amount
+ FROM payment
+ GROUP BY id HAVING SUM (amount) > 200;
+
+
+
+8. Follow the instructions for the scenarios below:
+  - Given this cats table from the previous checkpoint, list all cats organized by intake date.
+    SELECT * FROM cats ORDER BY intake_date;
+  - Given this adoptions table, determine the 5 most recent adoptions to be featured for a social media promotion called "Happy Tails" which lists recent successful adoptions.
+    SELECT * FROM adoptions ORDER BY date DESC LIMIT 5;
+  - There is a potential adopter looking for an adult female cat. In the most efficient way possible, list all female cats 2 or more years old from the cats table.
+    SELECT * FROM cats WHERE gender='F' LIMIT 2;
+  - From the donations table (from problem #2), find the top 5 donors with the highest cumulative donation amounts to be honored as “Platinum Donors”.
+    SELECT donor, SUM(amount) AS tot_amount FROM donations GROUP BY donor ORDER BY tot_amount DESC LIMIT 5;
+  - From the donations table (from problem #2), find donors 6-15 with the next highest cumulative donation amounts to be honored as “Gold Donors”.
+  SELECT donor, SUM(amount) AS tot_amount FROM donations GROUP BY donor ORDER BY tot_amount DESC LIMIT 10 OFFSET 5;
