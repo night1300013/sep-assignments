@@ -1,12 +1,13 @@
 1.Write out a generic SELECT statement.
-  SELECT * FROM products WHERE id=1234321;
+  SELECT [column1, column2,... or *] FROM [table] WHERE [condition] (optional);
 
 2.Create a fun way to remember the order of operations in a SELECT statement, such as a mnemonic.
-  start from select the vertical which is column or star for all, then from table name with condition where or not.
+Sweaty Feet Will  Give     Horrible Odours
+SELECT FROM WHERE GROUP BY HAVING   ORDER BY
 
 3.Given this dogs table, write queries to select the following pieces of data:
   - Display the name, gender, and age of all dogs that are part Labrador.
-    SELECT name, gender, and FROM dogs WHERE breed LIKE '%labrador%';
+    SELECT name, gender, age FROM dogs WHERE breed LIKE '%labrador%';
   - Display the ids of all dogs that are under 1 year old.
     SELECT id FROM dogs WHERE age < 1;
   - Display the name and age of all dogs that are female and over 35lbs.
@@ -46,7 +47,15 @@
     3. '>=': greater than or equal to, when want to get the results of cats that age is greater than or equal to  7. i.e. SELECT * FROM cats WHERE age >= 7
     4. '<=': smaller than or equal to, when want to get the results of cats that age is smaller than or equal to 1. i.e. SELECT * FROM cates WHERE age <= 1
     5. '!=', '<>': not equal to, when want to get the results of cats that age is not equal to 1. i.e. SELECT * FROM cates WHERE age <> 1
-    6. '=': equal to, when want to get the resultsof cats that age is equal to 1. i.e. SELECT * FROM cats WHERE age = 1
+    6. '=': equal to, when want to get the results of cats that age is equal to 1. i.e. SELECT * FROM cats WHERE age = 1
+    7. 'like': patten match a string, when want to get results that partially match. i.e. SELECT * FROM dogs WHERE breed LIKE '%husky%'
+    8. 'between': between value x and y, when want to get the range of result. i.e. SELECT * FROM product WHERE price BETWEEN 1 AND 100
+    9. 'is distinct from': compare 2 object, use it to compare NULL. i.e. SELECT * from dogs WHERE adoption_date IS DISTINCT FROM NULL
+    10. 'is true/is false': result is true or false, use to compare with true and false. i.e. SELECT * from bank WHERE enroll IS TRUE
+    11. 'is null': result is null, use to compare to null. i.e. SELECT * from dogs WHERE adoption_date IS NULL
+    12. 'AND': both expression is true, use to satisfied both condition. i.e. SELECT * from dogs WHERE gender='M' AND adoption_date IS NULL
+    13. 'OR': one expression is true, use to satisfied one or more condition. i.e. SELECT * from cats WHERE gender='F' or age < 1
+    14. 'NOT': the expression is false, use to get the false expression. i.e. SELECT * from dogs WHERE NOT genfer='M'
 
 7. From the cats table, what data is returned from these queries?
   - SELECT name FROM cats WHERE gender = ‘F’;
