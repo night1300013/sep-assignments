@@ -1,0 +1,256 @@
+1. How do you find related data that is held in two separate data tables?
+  Use key. Primary key in one table could be the foreign key in other table. By this way we can link the two tables.
+
+2. Explain, in your own words, the difference between a CROSS JOIN, INNER JOIN, LEFT OUTER JOIN, RIGHT OUTER JOIN, and FULL OUTER JOIN. Give a real world example for each.
+  CROSS JOIN: The result table has every combination rows of each column of each table that is queried. i.e. Dating website to see how many possible matches: SELECT * FROM males CROSS JOIN females;
+  INNER JOIN: The result table has rows that each queried table has the common column. i.e. to get every student's math and physics grade. SELECT math.student_id, math.grade, physics.grade FROM math JOIN physics ON math.student_id = physics.student_id;
+  LEFT OUTER JOIN: The result table has every row of the first table and matching row of second table. i.e. to get every user's profile picture link. Some of them might be null. SELECT user.name, profile.pic_url FROM user LEFT OUTER JOIN profile ON user.id = profile.user_id;
+  RIGHT OUTER JOIN: The result table has every row of the second table and matching row of first table. i.e. to get every user's profile picture link. Some of them might be null. SELECT user.name, profile.pic_url FROM profile RIGHT OUTER JOIN user ON user.id = profile.user_id;
+  FULL OUTER JOIN: The result table has every row of the first and second table. i.e. dating website to show everyone with/out matching successfully. SELECT females.name, males.name FROM males FULL OUTER JOIN females ON female.id = male.matching_id;
+
+3. Define primary key and foreign key. Give a real world example for each.
+  Primary key: It is a field in a table that uniquely identifies the row in a table. i.e. The member id needs to be primary key.
+    CREATE TABLE members (
+      id integer,
+      name varchar(50),
+      age integer,
+      address varchar(200),
+      PRIMARY KEY(id)
+    );
+  Foreign key: It is a field in a table that value matches primary key of other table. It is used to connect 2 table together. i.e. The member credit card information is stored at credit card table.
+    CREATE TABLE credit_cards (
+      id integer,
+      number varchar(20),
+      expire_date varchar(20),
+      member_id integer,
+      FOREIGN KEY(member_id) REFERENCES members(id)
+    );
+
+4. Define aliasing.
+  To reduce the amount of coding required by reducing the table or column name to single or less character(s). Aliasing can be used on column or table name.
+
+5. Change this query so that you are using aliasing:
+  SELECT professor.name, compensation.salary, compensation.vacation_days
+  FROM professor
+  JOIN compensation
+  ON professor.id = compensation.professor_id;
+
+  SELECT p.name, c.salary, c.vacation_days
+  FROM professor AS p
+  JOIN compensation AS c
+  ON p.id = c.professor_id;
+
+6. Why would you use a NATURAL JOIN? Give a real world example.
+  NATURAL JOIN will implicitly match the table column that appears in both tables and put into result table. The duplicated table will only appear once.
+  i.e. To find if the person has criminal report.
+  SELECT * FROM people NATURAL JOIN criminals;
+
+7. Using this Employee schema and data, write queries to find the following information:
+  - All employees with their shifts if they have any. Also include any unscheduled shifts.
+  SELECT e.name, s.id, s.date, s.start_time, s.end_time FROM scheduled_shifts AS ss
+  JOIN employees as e
+  ON ss.employee_id = e.id
+  RIGHT OUTER JOIN shifts as s
+  ON ss.shift_id = s.id
+  ORDER BY s.id;
+
+  name	           id	date	start_time	end_time
+  Padma Patil	      1	1998-03-09	08:00:00	12:00:00
+  Hermione Granger	2	1998-03-09	08:00:00	16:00:00
+  Luna Lovegood	    3	1998-03-09	12:00:00	16:00:00
+  Padma Patil	      4	1998-03-09	12:00:00	20:00:00
+  Dean Thomas	      5	1998-03-09	16:00:00	20:00:00
+  Padma Patil	      6	1998-03-10	08:00:00	12:00:00
+  Hermione Granger	7	1998-03-10	08:00:00	16:00:00
+  Ronald Weasley	  8	1998-03-10	12:00:00	16:00:00
+  Padma Patil	      9	1998-03-10	12:00:00	20:00:00
+  Dean Thomas	     10	1998-03-10	16:00:00	20:00:00
+  Padma Patil	     11	1998-03-11	08:00:00	12:00:00
+  Hermione Granger 12	1998-03-11	08:00:00	16:00:00
+  Luna Lovegood	   13	1998-03-11	12:00:00	16:00:00
+  Padma Patil	     14	1998-03-11	12:00:00	20:00:00
+  Draco Malfoy	   15	1998-03-11	16:00:00	20:00:00
+  null	           16	1998-03-12	08:00:00	12:00:00
+  Hermione Granger 17	1998-03-12	08:00:00	16:00:00
+  Ronald Weasley	 18	1998-03-12	12:00:00	16:00:00
+  Cho Chang	       19	1998-03-12	12:00:00	20:00:00
+  Draco Malfoy	   20	1998-03-12	16:00:00	20:00:00
+  null	           21	1998-03-13	08:00:00	12:00:00
+  Hermione Granger 22	1998-03-13	08:00:00	16:00:00
+  Luna Lovegood	   23	1998-03-13	12:00:00	16:00:00
+  Cho Chang	       24	1998-03-13	12:00:00	20:00:00
+  Draco Malfoy	   25	1998-03-13	16:00:00	20:00:00
+
+
+8. Using this Adoption schema and data, please write queries to retrieve the following information and include the results:
+  - All volunteers. If the volunteer is fostering a dog, include each dog as well.
+  SELECT v.id, v.first_name, v.last_name, v.address, v.phone_number, v.available_to_foster, dogs.id, dogs.name, dogs.gender, dogs.age, dogs.weight, dogs.breed, dogs.intake_date, dogs.in_foster
+  FROM volunteers AS v
+  LEFT OUTER JOIN dogs
+  ON v.foster_dog_id = dogs.id
+  ORDER BY v.id;
+
+  id	first_name	last_name	address	phone_number	available_to_foster	id	name	gender	age	weight	breed	intake_date	in_foster
+  1	Albus	Dumbledore	99 Godric's Hollow	843-746-3649	false	null	null	null	null	null	null	null	null
+  2	Rubeus	Hagrid	1 Edge of Forbidden Forest	256-667-2378	true	10002	Munchkin	F	0	8	dachsund chihuahua	2017-01-13T00:00:00.000Z	null
+  3	Remus	Lupin	12 Grimmauld Place	627-283-3771	true	null	null	null	null	null	null	null	null
+  4	Sirius	Black	12 Grimmauld Place	878-666-4663	true	null	null	null	null	null	null	null	null
+  5	Marjorie	Dursley	1990 Next Door to Fubster	463-528-2253	true	10006	Marmaduke	M	7	150	great dane	2016-03-22T00:00:00.000Z	null
+
+  - The cat's name, adopter's name, and adopted date for each cat adopted within the past month to be displayed as part of the "Happy Tail" social media promotion which posts recent successful adoptions.
+  SELECT c.name, a.first_name, a.last_name, ca.date
+  from cat_adoptions AS ca
+  JOIN adopters AS a
+  ON ca.adopter_id = a.id
+  JOIN cats AS c
+  ON ca.cat_id = c.id
+  WHERE ca.date >= CURRENT_DATE - INTERVAL '1 MONTH';
+
+  name	    first_name	last_name	date
+  Mushi	    Arabella	 Figg	     2018-07-03T00:00:00.000Z
+  Victoire	Argus	     Filch	   2018-07-08T00:00:00.000Z
+
+  - Adopters who have not yet chosen a dog to adopt and generate all possible combinations of adopters and available dogs.
+  SELECT *
+  FROM adopters AS a
+  LEFT OUTER JOIN dog_adoptions AS da
+  ON a.id = da.adopter_id
+  CROSS JOIN dogs
+  WHERE da.adopter_id is NULL AND dogs.id != 10007;
+
+  id	first_name	last_name	address	phone_number	adopter_id	dog_id	date	fee	id	name	gender	age	weight	breed	intake_date	in_foster
+  1	Hermione	Granger	32 Granger's Street	676-464-7837	null	null	null	null	10001	Boujee	F	3	36	labrador poodle	2017-06-22T00:00:00.000Z	null
+  2	Arabella	Figg	4 Wisteria Walk	843-228-5239	null	null	null	null	10001	Boujee	F	3	36	labrador poodle	2017-06-22T00:00:00.000Z	null
+  1	Hermione	Granger	32 Granger's Street	676-464-7837	null	null	null	null	10002	Munchkin	F	0	8	dachsund chihuahua	2017-01-13T00:00:00.000Z	null
+  2	Arabella	Figg	4 Wisteria Walk	843-228-5239	null	null	null	null	10002	Munchkin	F	0	8	dachsund chihuahua	2017-01-13T00:00:00.000Z	null
+  1	Hermione	Granger	32 Granger's Street	676-464-7837	null	null	null	null	10004	Marley	M	0	10	labrador	2017-05-04T00:00:00.000Z	null
+  2	Arabella	Figg	4 Wisteria Walk	843-228-5239	null	null	null	null	10004	Marley	M	0	10	labrador	2017-05-04T00:00:00.000Z	null
+  1	Hermione	Granger	32 Granger's Street	676-464-7837	null	null	null	null	10003	Lassie	F	7	17	collie shepherd	2016-07-05T00:00:00.000Z	null
+  2	Arabella	Figg	4 Wisteria Walk	843-228-5239	null	null	null	null	10003	Lassie	F	7	17	collie shepherd	2016-07-05T00:00:00.000Z	null
+  1	Hermione	Granger	32 Granger's Street	676-464-7837	null	null	null	null	10006	Marmaduke	M	7	150	great dane	2016-03-22T00:00:00.000Z	null
+  2	Arabella	Figg	4 Wisteria Walk	843-228-5239	null	null	null	null	10006	Marmaduke	M	7	150	great dane	2016-03-22T00:00:00.000Z	null
+
+  - Lists of all cats and all dogs who have not been adopted.
+  SELECT d.id, d.name, d.gender, d.age, d.intake_date
+  FROM dogs AS d
+  LEFT OUTER JOIN dog_adoptions
+  ON d.id = dog_adoptions.dog_id
+  WHERE dog_adoptions.dog_id is NULL
+  UNION
+  SELECT c.id, c.name, c.gender, c.age, c.intake_date
+  FROM cats AS c
+  LEFT OUTER JOIN cat_adoptions
+  ON c.id = cat_adoptions.cat_id
+  WHERE cat_adoptions.cat_id is NULL;
+
+  id	name	gender	age	intake_date
+  2	Seashell	F	7	2016-01-09T00:00:00.000Z
+  5	Nala	F	1	2016-01-12T00:00:00.000Z
+  10001	Boujee	F	3	2017-06-22T00:00:00.000Z
+  10002	Munchkin	F	0	2017-01-13T00:00:00.000Z
+  10003	Lassie	F	7	2016-07-05T00:00:00.000Z
+  10004	Marley	M	0	2017-05-04T00:00:00.000Z
+  10006	Marmaduke	M	7	2016-03-22T00:00:00.000Z
+
+  - Volunteers who are available to foster. If they currently are fostering a dog, include the dog. Also include all dogs who are not currently in foster homes.
+  SELECT v.id, v.first_name, v.last_name, v.address, v.phone_number, v.available_to_foster, dogs.id, dogs.name, dogs.gender, dogs.age, dogs.weight, dogs.breed, dogs.intake_date, dogs.in_foster
+  FROM volunteers AS v
+  FULL OUTER JOIN dogs
+  ON v.foster_dog_id = dogs.id
+  WHERE v.available_to_foster = true OR v.available_to_foster is NULL
+  ORDER BY v.id;
+
+  id	first_name	last_name	address	phone_number	available_to_foster	id	name	gender	age	weight	breed	intake_date	in_foster
+  2	Rubeus	Hagrid	1 Edge of Forbidden Forest	256-667-2378	true	10002	Munchkin	F	0	8	dachsund chihuahua	2017-01-13T00:00:00.000Z	null
+  3	Remus	Lupin	12 Grimmauld Place	627-283-3771	true	null	null	null	null	null	null	null	null
+  4	Sirius	Black	12 Grimmauld Place	878-666-4663	true	null	null	null	null	null	null	null	null
+  5	Marjorie	Dursley	1990 Next Door to Fubster	463-528-2253	true	10006	Marmaduke	M	7	150	great dane	2016-03-22T00:00:00.000Z	null
+  null	null	null	null	null	null	10001	Boujee	F	3	36	labrador poodle	2017-06-22T00:00:00.000Z	null
+  null	null	null	null	null	null	10007	Rosco	M	5	180	rottweiler	2017-04-01T00:00:00.000Z	null
+  null	null	null	null	null	null	10003	Lassie	F	7	17	collie shepherd	2016-07-05T00:00:00.000Z	null
+  null	null	null	null	null	null	10004	Marley	M	0	10	labrador	2017-05-04T00:00:00.000Z	null
+
+  - The name of the person who adopted Rosco.
+  SELECT a.first_name, a.last_name
+  FROM adopters AS a
+  JOIN dog_adoptions AS da
+  ON da.adopter_id = a.id
+  JOIN dogs
+  ON dogs.id = da.dog_id
+  WHERE dogs.name = 'Rosco';
+
+  first_name	last_name
+  Argus	      Filch
+
+9. Using this Library schema and data, write queries applying the following scenarios:
+
+  - To determine if the library should buy more copies of a given book, please provide the names and position, in order, of all of the patrons with a hold (request for a book with all copies checked out) on "Advanced Potion-Making".
+  SELECT p.name
+  FROM holds AS h
+  JOIN patrons AS p
+  ON p.id = h.patron_id
+  JOIN books AS b
+  ON h.isbn = b.isbn
+  WHERE b.title = 'Advanced Potion-Making'
+  ORDER BY p.id;
+
+  name
+  Terry Boot
+  Cedric Diggory
+
+  - Make a list of all book titles and denote whether or not a copy of that book is checked out.
+  SELECT b.title, CASE WHEN t.checked_in_date IS NULL THEN True ELSE False END AS checked_out
+  FROM transactions AS t
+  JOIN books AS b
+  ON t.isbn = b.isbn
+  GROUP BY t.checked_in_date, b.title;
+
+  title	checked_out
+  Hogwarts: A History	false
+  Fantastic Beasts and Where to Find Them	true
+  Advanced Potion-Making	false
+  Fantastic Beasts and Where to Find Them	false
+  Advanced Potion-Making	true
+  Fantastic Beasts and Where to Find Them	false
+  Fantastic Beasts and Where to Find Them	false
+
+  - In an effort to learn which books take longer to read, the librarians would like you to create a list of average checked out time by book name in the past month.
+  SELECT b.title, AVG (CASE WHEN t.checked_in_date IS NULL THEN CURRENT_DATE - t.checked_out_date ELSE t.checked_in_date - t.checked_out_date END) AS avg_date
+  FROM transactions AS t
+  JOIN books AS b
+  ON t.isbn = b.isbn
+  WHERE t.checked_out_date >= CURRENT_DATE - INTERVAL '1 month'
+  GROUP BY b.title;
+
+  title	                                  avg_date
+  Fantastic Beasts and Where to Find Them	2.0000000000000000
+  Advanced Potion-Making	                3.0000000000000000
+
+  - In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
+  SELECT b.title, max(t.checked_out_date)
+  FROM books AS b
+  JOIN transactions as t
+  ON t.isbn = b.isbn
+  group by b.title
+  having max(t.checked_out_date) <= (CURRENT_DATE - INTERVAL '5 years') ;
+
+  title	max
+  Hogwarts: A History	2012-07-22T00:00:00.000Z
+
+  - List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
+  SELECT p.name, t.checked_out_date, b.title
+  FROM transactions AS t
+  JOIN patrons as p
+  ON t.patron_id = p.id
+  JOIN books as b
+  ON b.isbn = t.isbn
+  ORDER BY p.name;
+
+  name	checked_out_date	title
+  Cedric Diggory	2018-07-22T00:00:00.000Z	Fantastic Beasts and Where to Find Them
+  Cho Chang	2012-07-22T00:00:00.000Z	Advanced Potion-Making
+  Hermione Granger	2018-07-20T00:00:00.000Z	Fantastic Beasts and Where to Find Them
+  Hermione Granger	2012-07-22T00:00:00.000Z	Hogwarts: A History
+  Padma Patil	2018-07-16T00:00:00.000Z	Fantastic Beasts and Where to Find Them
+  Terry Boot	2018-07-20T00:00:00.000Z	Advanced Potion-Making
+  Terry Boot	2012-07-22T00:00:00.000Z	Fantastic Beasts and Where to Find Them
