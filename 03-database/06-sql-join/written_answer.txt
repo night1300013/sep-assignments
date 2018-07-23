@@ -240,7 +240,7 @@
   - List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
   SELECT p.name, t.checked_out_date, b.title
   FROM transactions AS t
-  JOIN patrons as p
+  RIGHT OUTER JOIN patrons as p
   ON t.patron_id = p.id
   JOIN books as b
   ON b.isbn = t.isbn
