@@ -185,34 +185,30 @@
 9. Using this Library schema and data, write queries applying the following scenarios:
 
   - To determine if the library should buy more copies of a given book, please provide the names and position, in order, of all of the patrons with a hold (request for a book with all copies checked out) on "Advanced Potion-Making".
-  SELECT p.name
+  SELECT p.name, h.rank
   FROM holds AS h
   JOIN patrons AS p
   ON p.id = h.patron_id
   JOIN books AS b
   ON h.isbn = b.isbn
   WHERE b.title = 'Advanced Potion-Making'
-  ORDER BY p.id;
+  ORDER BY h.rank;
 
-  name
-  Terry Boot
-  Cedric Diggory
+  name	       rank
+  Terry Boot	    1
+  Cedric Diggory	2
 
   - Make a list of all book titles and denote whether or not a copy of that book is checked out.
-  SELECT b.title, CASE WHEN t.checked_in_date IS NULL THEN True ELSE False END AS checked_out
-  FROM transactions AS t
+  SELECT b.title, CASE WHEN t.checked_in <= t.checked_out THEN True ELSE False END AS checked_out
+  FROM (SELECT isbn, MAX(checked_out_date) AS checked_out, MAX(checked_in_date) AS checked_in
+  FROM transactions group by isbn) AS t
   JOIN books AS b
-  ON t.isbn = b.isbn
-  GROUP BY t.checked_in_date, b.title;
+  ON t.isbn = b.isbn;
 
-  title	checked_out
-  Hogwarts: A History	false
-  Fantastic Beasts and Where to Find Them	true
-  Advanced Potion-Making	false
-  Fantastic Beasts and Where to Find Them	false
-  Advanced Potion-Making	true
-  Fantastic Beasts and Where to Find Them	false
-  Fantastic Beasts and Where to Find Them	false
+  title	                                checked_out
+  Hogwarts: A History	                     false
+  Advanced Potion-Making	                 true
+  Fantastic Beasts and Where to Find Them	 true
 
   - In an effort to learn which books take longer to read, the librarians would like you to create a list of average checked out time by book name in the past month.
   SELECT b.title, AVG (CASE WHEN t.checked_in_date IS NULL THEN CURRENT_DATE - t.checked_out_date ELSE t.checked_in_date - t.checked_out_date END) AS avg_date
@@ -238,19 +234,18 @@
   Hogwarts: A History	2012-07-22T00:00:00.000Z
 
   - List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
-  SELECT p.name, t.checked_out_date, b.title
+  SELECT p.name, MAX(CASE WHEN t.checked_in_date IS NULL THEN b.title ELSE NULL END )AS title
   FROM transactions AS t
   RIGHT OUTER JOIN patrons as p
   ON t.patron_id = p.id
   JOIN books as b
   ON b.isbn = t.isbn
-  ORDER BY p.name;
+  GROUP BY p.name
+  ;
 
-  name	checked_out_date	title
-  Cedric Diggory	2018-07-22T00:00:00.000Z	Fantastic Beasts and Where to Find Them
-  Cho Chang	2012-07-22T00:00:00.000Z	Advanced Potion-Making
-  Hermione Granger	2018-07-20T00:00:00.000Z	Fantastic Beasts and Where to Find Them
-  Hermione Granger	2012-07-22T00:00:00.000Z	Hogwarts: A History
-  Padma Patil	2018-07-16T00:00:00.000Z	Fantastic Beasts and Where to Find Them
-  Terry Boot	2018-07-20T00:00:00.000Z	Advanced Potion-Making
-  Terry Boot	2012-07-22T00:00:00.000Z	Fantastic Beasts and Where to Find Them
+  name	           title
+  Hermione Granger	null
+  Cho Chang	        null
+  Padma Patil	      null
+  Terry Boot	      Advanced Potion-Making
+  Cedric Diggory	  Fantastic Beasts and Where to Find Them
