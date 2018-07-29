@@ -1,0 +1,232 @@
+1.Create a database for the model we built in the example. Create a SQL file that creates the tables and inserts sample data (the questions below will help you create the data). Write queries applying the following scenarios:
+  -Find a guest who exists in the database and has not booked a room.
+  SELECT g.name
+  FROM guests AS g
+  LEFT JOIN bookings AS b
+  ON g.id = b.guest_id
+  WHERE b.guest_id IS NULL;
+
+  name
+  Cedric Diggory
+
+  -Find bookings for a guest who has booked two rooms for the same dates.
+  SELECT g.name, b.checked_in_date, count(*) AS same_check_in, b.checked_out_date, count(*) AS same_check_out
+  FROM guests AS g
+  JOIN (SELECT guest_id, room_id, checked_in_date, CASE WHEN checked_out_date IS NULL THEN CURRENT_DATE ELSE checked_out_date END AS checked_out_date FROM bookings) AS b
+  ON g.id = b.guest_id
+  GROUP BY g.name, b.checked_in_date, b.checked_out_date
+  HAVING count(*) = 2 AND COUNT(DISTINCT b.room_id) = 2;
+
+  name	       checked_in_date	same_check_in	checked_out_date	same_check_out
+  Terry Boot	2018-07-23T00:00:00.000Z	2	2018-07-26T00:00:00.000Z	2
+
+  -Find bookings for a guest who has booked one room several times on different dates.
+  SELECT g.name, b.room_id, COUNT(b.room_id) AS count
+  FROM guests AS g
+  JOIN bookings AS b
+  ON g.id = b.guest_id
+  group by g.name, b.room_id
+  HAVING COUNT(b.room_id) > 1;
+
+  name	room_id	count
+  Terry Boot	4	2
+
+  -Count the number of unique guests who have booked the same room.
+  SELECT b.room_id, COUNT(DISTINCT g.name) AS count
+  FROM guests AS g
+  JOIN bookings AS b
+  ON g.id = b.guest_id
+  group by b.room_id;
+
+  room_id	count
+  1	1
+  2	2
+  4	1
+  5	3
+
+  CREATE TABLE guests (
+    "id" INTEGER,
+    "name"   VARCHAR(64),
+    "phone_number" VARCHAR(15),
+    "email" VARCHAR(320),
+    "address" VARCHAR(255),
+
+    PRIMARY KEY ("id")
+  );
+
+  CREATE TABLE rooms (
+    "id"   INTEGER,
+    "room_number" INTEGER,
+    "floor_number" INTEGER,
+    "price" DECIMAL(6,2),
+
+    PRIMARY KEY ("id")
+  );
+
+  CREATE TABLE bookings (
+    "id"               INTEGER,
+    "guest_id"        INTEGER,
+    "room_id"         INTEGER,
+    "checked_out_date" DATE,
+    "checked_in_date"  DATE,
+
+    FOREIGN KEY ("guest_id")
+      REFERENCES "guests" ("id")
+      ON DELETE CASCADE,
+
+    FOREIGN KEY ("room_id")
+      REFERENCES "rooms" ("id")
+      ON DELETE CASCADE,
+
+    PRIMARY KEY ("id")
+  );
+
+
+  INSERT INTO guests
+    ("id", "name",  "phone_number", "email", "address" )
+  VALUES
+    ( 1,   'Hermione Granger', '713-299-8206', 'hg@gmail.com', '1288 Pear Ave, Mountain View, CA 94043'),
+    ( 2, 	 'Terry Boot', '291-262-2233', 'tb@hotmail.com', '1600 Amphitheatre Pkwy, Mountain View, CA 94043'),
+    ( 3,   'Padma Patil', '713-298-8206', 'pp@hotmail.com', '400 W California Ave, Sunnyvale, CA 94086'),
+    ( 4,   'Cho Chang', '408-444-5555', 'cc@gmail.com', '1000 W Maude Ave, Sunnyvale, CA 94085'),
+    ( 5,   'Cedric Diggory', '555-666-9999', 'cd@yahoo.com', '1100 Enterprise Way, Sunnyvale, CA 94089');
+
+  INSERT INTO rooms
+    ("id", "room_number", "floor_number", "price")
+  VALUES
+    ( 1,   101, 1, 123.99),
+    ( 2,   202, 2, 223.99),
+    ( 3,   303, 3, 1223.99),
+    ( 4,   404, 4, 2333.99),
+    ( 5,   505, 5, 3333.99);
+
+  INSERT INTO bookings
+    ("id", "guest_id", "room_id",       "checked_in_date",                        "checked_out_date")
+  VALUES
+   ( 1,     1,          1,  CURRENT_DATE - INTERVAL '6 DAYS',  CURRENT_DATE - INTERVAL '4 DAYS'),
+   ( 2,     4,          5,  CURRENT_DATE - INTERVAL '6 DAYS',  CURRENT_DATE - INTERVAL '3 DAYS'),
+   ( 3,     2,          2,  CURRENT_DATE - INTERVAL '6 DAYS',  CURRENT_DATE - INTERVAL '3 DAYS'),
+   ( 4,     3,          2,  CURRENT_DATE - INTERVAL '12 DAYS', CURRENT_DATE - INTERVAL '7 DAYS'),
+   ( 5,     2,          5,  CURRENT_DATE - INTERVAL '3 DAYS',          NULL),
+   ( 6,     1,          5,  CURRENT_DATE - INTERVAL '8 DAYS',          CURRENT_DATE - INTERVAL '7 DAY'),
+   ( 7,     2,          4,  CURRENT_DATE - INTERVAL '1 DAY',           NULL),
+   ( 8,     2,          4,  CURRENT_DATE - INTERVAL '6 DAY',           CURRENT_DATE - INTERVAL '3 DAY');
+
+
+2. Design a data model for students and the classes they have taken. The model should include the students' grades for a given class.
+  - Work through the questions from the example above.
+    - What classes/entities do we need to model?
+      student and class information. Also the grade that connects student and class that the grade of the student in the class
+    - What fields/attributes will each entity need?
+      student: id, name, email
+      class: id, class_name
+      grade: id, student_id, class_id, grade
+
+    - What data types do we need to use?
+      id, student_id, class_id: INTEGER
+      name, email, class_name, grade: VARCHAR
+    - What relationships exist between entities?
+      student and class are many to many since one student can take many classes, and one class can have many student.
+      Create grade table that contains grade, student id and class id. One to many relationship between grade and class & grade and student.
+    - How should those relationships be represented in tables?
+      many to many between student and class
+      one to many between grade and class
+      one to many between grade and student
+  - Document any assumptions you make about what data should be stored, what data types should be used, etc., and include them in a text file.
+    student: id, name, email
+    class: id, class_name
+    grade: id, student_id, class_id, grade
+    id, student_id, class_id: INTEGER
+    name, email, class_name, grade: VARCHAR
+  - Ask questions of your mentor in your next session if you are unsure about parts of your model.
+  - Draw the model using the notation used in the checkpoint and submit a picture. You can also use a tool like StarUML or quickdatabasediagrams.com if you choose.
+    See diagram.jpg
+
+3. Build a database for the students/classes data model. Create a SQL file that creates the tables and inserts sample data (the questions below will help you create the data). Write queries for the following data:
+  - All students who have taken a particular class.
+  SELECT s.name, c.class_name
+  FROM grades AS g
+  JOIN students AS s
+  ON g.student_id = s.id
+  JOIN classes AS c
+  ON g.class_id = c.id
+  WHERE c.class_name = 'Art';
+
+  name	class_name
+  Cho Chang	Art
+  Terry Boot	Art
+  Hermione Granger	Art
+
+  - The number of each grade (using letter grades A-F) earned in a particular class.
+  SELECT g.grade AS art_grade, COUNT(*)
+  FROM grades AS g
+  JOIN students AS s
+  ON g.student_id = s.id
+  JOIN classes AS c
+  ON g.class_id = c.id
+  WHERE c.class_name = 'Art'
+  GROUP BY g.grade;
+
+  art_grade	count
+  B	      1
+  C	      1
+  D	      1
+
+  - Class names and the total number of students who have taken each class in the list.
+  SELECT c.class_name, COUNT(s.id)
+  FROM grades AS g
+  JOIN students AS s
+  ON g.student_id = s.id
+  JOIN classes AS c
+  ON g.class_id = c.id
+  GROUP BY c.class_name;
+
+  class_name	count
+    Art	      3
+    Math	    1
+    Physics	  2
+    Grammar	  2
+
+  - The class taken by the largest number of students.
+  SELECT c.class_name, COUNT(s.id) AS count
+  FROM grades AS g
+  JOIN students AS s
+  ON g.student_id = s.id
+  JOIN classes AS c
+  ON g.class_id = c.id
+  GROUP BY c.class_name
+  ORDER BY count DESC
+  LIMIT 1;
+
+  class_name	count
+  Art	3
+
+  INSERT INTO students
+      ("id", "name", "email")
+    VALUES
+      ( 1,   'Hermione Granger', 'hg@gmail.com'),
+      ( 2, 	 'Terry Boot', 'tb@hotmail.com'),
+      ( 3,   'Padma Patil', 'pp@hotmail.com'),
+      ( 4,   'Cho Chang', 'cc@gmail.com'),
+      ( 5,   'Cedric Diggory', 'cd@yahoo.com');
+
+    INSERT INTO classes
+      ("id", "class_name")
+    VALUES
+      ( 1,   'Math'),
+      ( 2,   'Physics'),
+      ( 3,   'Biology'),
+      ( 4,   'Grammar'),
+      ( 5,   'Art');
+
+    INSERT INTO grades
+      ("id", "student_id", "class_id",       "grade")
+    VALUES
+     ( 1,     1,          1,  'A'),
+     ( 2,     4,          5,  'B'),
+     ( 3,     2,          2,  'C'),
+     ( 4,     3,          2,  'D'),
+     ( 5,     2,          5,  'D'),
+     ( 6,     1,          5,  'C'),
+     ( 7,     2,          4,  'B'),
+     ( 8,     2,          4,  'A');
