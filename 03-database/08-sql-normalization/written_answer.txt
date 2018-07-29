@@ -1,0 +1,67 @@
+1. In your own words, explain the benefits of normalization. Include a real-world scenario where normalization is necessary.
+It can reduce the data repetition in order to improve the data integrity.
+For example, if I want to do online shopping on amazon, I don't want the item I put into my cart appear to the other person who shares the same name with me.
+Or if I am the database maintainer, I don't want to accidentally add the product that does not have supplier, which means supplier id does not exist.
+Or if I am the database maintainer, I want to make sure that I don't mess two different people who shares some same information.
+Normalization makes the mistake happen less.
+
+2. List and explain the different normal forms and how they relate to one another, with regard to your real-world scenario in the first question.
+  There are 1NF, 2NF, 3NF, and BCNF(or 3.5 NF). The later on includes the rule of previous one and add one more rule on top of it.
+  1NF: The column cannot contain multiple values. It can make query, delete, and update simple if changing only one of it. For example, one amazon customer has multiple addresses, put one address in one column is good idea that once the customer wants to update or delete one of the address, it is easier.
+  2NF: With 1NF's rule, all the non-key columns are depends on primary key, all columns in the table serve for one same purpose. For example, if a customer table includes the id, store_ID and store_location, which store_location is not depends on id, thus need to move store_location to store table with id corresponding with customer table. By doing so, we can make table clean to make mistake happen less.
+  3NF: With 2NF's rule, the column that is depends on primary key through another column need to put into other table. Again, this can make table clear and easier to maintain. For example, if a customer table includes the id, payment_id, and credit_card_number. The credit_card_number is depends on payment_id, and payment_id is depends on id. Therefore, move credit_card_number to payment table and id is associated with payment_id
+  3.5NF: With 3NF's rule, the key that is depends on must be a super key. Again, by this way each table is simple and easier to clean up mistake. For example, if customer table have name, member_id, payment_id, credit_card_number, and expired_date. The non-key columns are depend on either name or payment_id, it should be separated into customer table includes name, member_id, payment table includes payment_id, credit_card_number, and expired_date, and check_out table includes name and credit_id
+
+3. This student_records table contains students and their grades in different subjects. The schema is already in first normal form (1NF). Convert this schema to the third normal form (3NF) using the techniques you learned in this checkpoint.
+CREATE TABLE students (
+  "id"       INTEGER,
+  "student_email"  VARCHAR(24),
+  "student_name"   VARCHAR(9),
+
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE professors (
+  "id"   INTEGER,
+  "professor_name" VARCHAR(9),
+
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE subjects (
+  "id" INTEGER,
+  "subject"        VARCHAR(11),
+  "grade"          VARCHAR(1),
+
+  PRIMARY KEY ("id")
+);
+
+CREATE TABLE grades (
+  "id" INTEGER,
+  "subject_id" INTEGER,
+  "professor_id" INTEGER,
+  "student_id" INTEGER,
+  "grade"          VARCHAR(1),
+
+  FOREIGN KEY ("subject_id")
+  	REFERENCES "subjects" ("id")
+    ON DELETE CASCADE,
+  FOREIGN KEY ("professor_id")
+  	REFERENCES "professors" ("id")
+    ON DELETE CASCADE,
+  FOREIGN KEY ("student_id")
+  	REFERENCES "students" ("id")
+    ON DELETE CASCADE,
+  PRIMARY KEY ("id")
+);
+
+4. In your own words, explain the potential disadvantages of normalizing the data above. What are its trade-offs? Submit your findings in the submission table and discuss them with your mentor in your next session.
+  Divid into many tables make query more complicated, and reduce the speed of query. It's harder for developer to maintain.
+  At the mean time the table is clean and data is more reliable.
+
+5. Looking at the tables you have normalized. If you need to denormalize to improve query performance or speed up reporting, how would you carry out denormalization for this database design? Submit potential strategies in the submission tab and discuss them with your mentor in your next session.
+  From question 3, I would like to combine grade and subject to speed up and minimize the query time since the whole chop out to too small.
+
+6. Explore the trade-offs between data normalization and denormalization in this scenario, submit your findings in the submission tab, and discuss them with your mentor in your next session.
+  If doing normalization, the table is clean and less possible to have mistake, but the query performance decreases and more time for developer to construct the whole model.
+  If doing denormalization, the query speed is faster, and performance is better. However, the chance that data is corrupted increased.

@@ -201,32 +201,65 @@
   class_name	count
   Art	3
 
+  CREATE TABLE students (
+    "id" INTEGER,
+    "name"   VARCHAR(64),
+    "email" VARCHAR(320),
+
+    PRIMARY KEY ("id")
+  );
+
+  CREATE TABLE classes (
+    "id"   INTEGER,
+    "class_name" VARCHAR(64),
+
+    PRIMARY KEY ("id")
+  );
+
+  CREATE TABLE grades (
+    "id"               INTEGER,
+    "student_id"        INTEGER,
+    "class_id"         INTEGER,
+    "grade"	VARCHAR(1),
+
+    FOREIGN KEY ("student_id")
+      REFERENCES "students" ("id")
+      ON DELETE CASCADE,
+
+    FOREIGN KEY ("class_id")
+      REFERENCES "classes" ("id")
+      ON DELETE CASCADE,
+
+    PRIMARY KEY ("id")
+  );
+
+
   INSERT INTO students
-      ("id", "name", "email")
-    VALUES
-      ( 1,   'Hermione Granger', 'hg@gmail.com'),
-      ( 2, 	 'Terry Boot', 'tb@hotmail.com'),
-      ( 3,   'Padma Patil', 'pp@hotmail.com'),
-      ( 4,   'Cho Chang', 'cc@gmail.com'),
-      ( 5,   'Cedric Diggory', 'cd@yahoo.com');
+    ("id", "name", "email")
+  VALUES
+    ( 1,   'Hermione Granger', 'hg@gmail.com'),
+    ( 2, 	 'Terry Boot', 'tb@hotmail.com'),
+    ( 3,   'Padma Patil', 'pp@hotmail.com'),
+    ( 4,   'Cho Chang', 'cc@gmail.com'),
+    ( 5,   'Cedric Diggory', 'cd@yahoo.com');
 
-    INSERT INTO classes
-      ("id", "class_name")
-    VALUES
-      ( 1,   'Math'),
-      ( 2,   'Physics'),
-      ( 3,   'Biology'),
-      ( 4,   'Grammar'),
-      ( 5,   'Art');
+  INSERT INTO classes
+    ("id", "class_name")
+  VALUES
+    ( 1,   'Math'),
+    ( 2,   'Physics'),
+    ( 3,   'Biology'),
+    ( 4,   'Grammar'),
+    ( 5,   'Art');
 
-    INSERT INTO grades
-      ("id", "student_id", "class_id",       "grade")
-    VALUES
-     ( 1,     1,          1,  'A'),
-     ( 2,     4,          5,  'B'),
-     ( 3,     2,          2,  'C'),
-     ( 4,     3,          2,  'D'),
-     ( 5,     2,          5,  'D'),
-     ( 6,     1,          5,  'C'),
-     ( 7,     2,          4,  'B'),
-     ( 8,     2,          4,  'A');
+  INSERT INTO grades
+    ("id", "student_id", "class_id",       "grade")
+  VALUES
+   ( 1,     1,          1,  'A'),
+   ( 2,     4,          5,  'B'),
+   ( 3,     2,          2,  'C'),
+   ( 4,     3,          2,  'D'),
+   ( 5,     2,          5,  'D'),
+   ( 6,     1,          5,  'C'),
+   ( 7,     2,          4,  'B'),
+   ( 8,     2,          4,  'A');
